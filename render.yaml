@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: savora-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: bash build.sh
+    startCommand: gunicorn config.wsgi:application --log-file -
+    healthCheckPath: /api/recipes/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: savora-db
+          property: connectionString
+
+databases:
+  - name: savora-db
+    databaseName: savora
+    user: savora
+    plan: free
