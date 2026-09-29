@@ -84,7 +84,7 @@ npm run build
 Les fichiers `render.yaml` et `frontend/vercel.json` préconfigurent le déploiement. Le Blueprint Render crée le service Django et une base PostgreSQL ; le script de build installe les dépendances, collecte les fichiers statiques et applique les migrations.
 
 1. Pousse le projet vers un dépôt Git et connecte ce dépôt à Render.
-2. Dans Render, crée un **Blueprint** à partir du dépôt et applique `render.yaml`.
+2. Dans Render, crée un **Blueprint** à partir du dépôt et applique `render.yaml`. Renseigne les trois variables Cloudinary demandées (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` et `CLOUDINARY_API_SECRET`) avec les valeurs de ton compte Cloudinary.
 3. Copie l’URL publique du service backend Render.
 4. Importe le même dépôt dans Vercel et définis `frontend` comme **Root Directory**.
 5. Dans les variables d’environnement Vercel, ajoute `VITE_API_BASE` avec la valeur `https://<url-du-backend-render>/api`, puis redéploie le frontend.
@@ -92,4 +92,4 @@ Les fichiers `render.yaml` et `frontend/vercel.json` préconfigurent le déploie
 
 La clé `SECRET_KEY` est générée par Render et `DEBUG` est désactivé. Pour créer un compte administrateur, ouvre le shell du service Render et exécute `python manage.py createsuperuser`.
 
-**Stockage en production :** la base PostgreSQL du Blueprint est gratuite mais temporaire sur Render Free. Le système de fichiers des services gratuits est éphémère ; les photos envoyées dans `media/` peuvent disparaître lors d’un redémarrage ou d’un redéploiement. Pour conserver les données et les photos, utilise une base PostgreSQL payante et un disque persistant Render ou un stockage objet pour les médias.
+**Stockage en production :** les photos sont stockées sur Cloudinary lorsque les trois variables Cloudinary sont configurées. Le système de fichiers des services gratuits Render étant éphémère, les photos locales ne sont pas une solution de stockage durable. Les photos déjà enregistrées localement ne sont pas migrées automatiquement et devront être téléversées à nouveau. La base PostgreSQL du Blueprint est également temporaire sur Render Free.
