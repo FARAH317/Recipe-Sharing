@@ -10,7 +10,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-change-me-before-deploying")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 INSTALLED_APPS = [
-    "cloudinary_storage",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
