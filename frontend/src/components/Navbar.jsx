@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-export default function Navbar({ view, goTo, authed, onLogout, onLoginClick }) {
+export default function Navbar({ view, goTo, authed, onLogout, onLoginClick, onRegisterClick }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     function onScroll() {
@@ -19,7 +19,10 @@ export default function Navbar({ view, goTo, authed, onLogout, onLoginClick }) {
         {authed ? (
           <button className="nav-link" onClick={onLogout}>Déconnexion</button>
         ) : (
-          <button className="nav-link" onClick={onLoginClick}>Connexion</button>
+          <>
+            <button className="nav-link" onClick={onLoginClick}>Connexion</button>
+            <button className="nav-link" onClick={onRegisterClick}>Inscription</button>
+          </>
         )}
       </nav>
     </header>

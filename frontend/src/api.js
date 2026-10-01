@@ -34,6 +34,13 @@ export async function login(username, password) {
   const { data } = await axios.post(`${API_BASE}/token/`, { username, password });
   localStorage.setItem("access_token", data.access);
   localStorage.setItem("refresh_token", data.refresh);
+  return data;
+}
+export async function register(username, password) {
+  const { data } = await axios.post(`${API_BASE}/register/`, { username, password });
+  localStorage.setItem("access_token", data.access);
+  localStorage.setItem("refresh_token", data.refresh);
+  return data;
 }
 export function logout() {
   localStorage.removeItem("access_token");

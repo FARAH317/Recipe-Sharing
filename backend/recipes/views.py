@@ -1,13 +1,36 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Recipe, Favorite, Review
 from .serializers import (
     RecipeListSerializer,
     RecipeDetailSerializer,
     FavoriteSerializer,
     ReviewSerializer,
+    RegisterSerializer,
 )
+
+
+class RegisterView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                "user": {"id": user.id, "username": user.username},
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """Anyone can read; only the recipe's author can edit or delete it."""
     def has_object_permission(self, request, view, obj):

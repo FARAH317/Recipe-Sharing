@@ -11,10 +11,15 @@ import "./styles.css";
 export default function App() {
   const [authed, setAuthed] = useState(isAuthenticated());
   const [showLogin, setShowLogin] = useState(false);
+  const [authMode, setAuthMode] = useState("login");
   const [view, setView] = useState("home"); // home | browse | detail | add | favorites
   const [activeRecipeId, setActiveRecipeId] = useState(null);
   const [editingRecipeId, setEditingRecipeId] = useState(null);
   const [cuisineFilter, setCuisineFilter] = useState(null);
+  function openAuthModal(mode = "login") {
+    setAuthMode(mode);
+    setShowLogin(true);
+  }
   function openRecipe(id) {
     setActiveRecipeId(id);
     setView("detail");
@@ -26,11 +31,11 @@ export default function App() {
     window.scrollTo(0, 0);
   }
   function requireLogin() {
-    setShowLogin(true);
+    openAuthModal("login");
   }
   function goTo(v) {
     if (v === "add" && !authed) {
-      setShowLogin(true);
+      openAuthModal("register");
       return;
     }
     setView(v);
@@ -48,7 +53,8 @@ export default function App() {
         goTo={goTo}
         authed={authed}
         onLogout={() => { logout(); setAuthed(false); setView("home"); }}
-        onLoginClick={() => setShowLogin(true)}
+        onLoginClick={() => openAuthModal("login")}
+        onRegisterClick={() => openAuthModal("register")}
       />
       {view === "home" && (
         <Home onOpenRecipe={openRecipe} onGoDiscover={() => goTo("browse")} onSelectCuisine={selectCuisine} />
@@ -78,6 +84,7 @@ export default function App() {
       )}
       {showLogin && (
         <Login
+          initialMode={authMode}
           onCancel={() => setShowLogin(false)}
           onLoggedIn={() => { setAuthed(true); setShowLogin(false); }}
         />

@@ -31,6 +31,18 @@ class RecipeSerializerTest(TestCase):
         self.assertEqual(recipe.ingredients.count(), 2)
         self.assertEqual(recipe.steps.count(), 2)
         self.assertEqual(recipe.author, user)
+class RegistrationAPITest(TestCase):
+    def test_user_can_register_and_get_tokens(self):
+        response = self.client.post(
+            "/api/register/",
+            {"username": "newchef", "password": "StrongPass123!"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
+        self.assertTrue(get_user_model().objects.filter(username="newchef").exists())
+
 class RecipeOwnershipAPITest(TestCase):
     def setUp(self):
         user_model = get_user_model()
